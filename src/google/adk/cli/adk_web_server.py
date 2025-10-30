@@ -32,6 +32,7 @@ from typing import Optional
 from fastapi import FastAPI
 from fastapi import HTTPException
 from fastapi import Query
+from fastapi import Request
 from fastapi import Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
@@ -780,10 +781,18 @@ class AdkWebServer:
         response_model_exclude_none=True,
     )
     async def create_session(
+        request: Request, # Add Request object to the signature
         app_name: str,
         user_id: str,
         req: Optional[CreateSessionRequest] = None,
     ) -> Session:
+      # Log the X-Goog-Authenticated-User-Email header
+      user_email = request.headers.get("X-Goog-Authenticated-User-Email")
+      if user_email:
+        logger.info(
+            "X-Goog-Authenticated-User-Email for create_session: %s", user_email
+        )
+
       if not req:
         return await self._create_session(app_name=app_name, user_id=user_id)
 
