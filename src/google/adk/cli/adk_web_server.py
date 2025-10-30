@@ -787,6 +787,9 @@ class AdkWebServer:
         req: Optional[CreateSessionRequest] = None,
     ) -> Session:
       # Log the X-Goog-Authenticated-User-Email header
+      logger.info(
+            "create_session() start"
+        )
       user_email = request.headers.get("X-Goog-Authenticated-User-Email")
       if user_email:
         logger.info(
