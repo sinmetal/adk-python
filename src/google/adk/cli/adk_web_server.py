@@ -801,6 +801,8 @@ class AdkWebServer:
       logger.info(
             "create_session() start"
         )
+      logger.info(f"request: {request}")
+      logger.info(f"request.headers: {request.headers}")
       user_email = request.headers.get("X-Goog-Authenticated-User-Email")
       if user_email:
         logger.info(
