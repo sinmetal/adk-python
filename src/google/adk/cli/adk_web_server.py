@@ -764,11 +764,22 @@ class AdkWebServer:
         response_model_exclude_none=True,
     )
     async def create_session_with_id(
+        request: Request, # Add Request object to the signature
         app_name: str,
         user_id: str,
         session_id: str,
         state: Optional[dict[str, Any]] = None,
     ) -> Session:
+       # Log the X-Goog-Authenticated-User-Email header
+      logger.info(
+            "create_session_with_id() start"
+        )
+      user_email = request.headers.get("X-Goog-Authenticated-User-Email")
+      if user_email:
+        logger.info(
+            "X-Goog-Authenticated-User-Email for create_session: %s", user_email
+        )
+
       return await self._create_session(
           app_name=app_name,
           user_id=user_id,
