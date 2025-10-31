@@ -777,7 +777,7 @@ class AdkWebServer:
       user_email = request.headers.get("X-Goog-Authenticated-User-Email")
       if user_email:
         logger.info(
-            "X-Goog-Authenticated-User-Email for create_session: %s", user_email
+            "{ \"login_user\": \"%s\", \"session_id\":\"%s\"}", user_email, session_id
         )
 
       return await self._create_session(
@@ -803,11 +803,6 @@ class AdkWebServer:
         )
       logger.info(f"request: {request}")
       logger.info(f"request.headers: {request.headers}")
-      user_email = request.headers.get("X-Goog-Authenticated-User-Email")
-      if user_email:
-        logger.info(
-            "X-Goog-Authenticated-User-Email for create_session: %s", user_email
-        )
 
       if not req:
         return await self._create_session(app_name=app_name, user_id=user_id)
@@ -818,6 +813,11 @@ class AdkWebServer:
           state=req.state,
           session_id=req.session_id,
       )
+      user_email = request.headers.get("X-Goog-Authenticated-User-Email")
+      if user_email:
+        logger.info(
+            "{ \"login_user\": \"%s\", \"session_id\":\"%s\"}", user_email, session.session_id
+        )
 
       if req.events:
         for event in req.events:
